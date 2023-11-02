@@ -1,0 +1,7 @@
+FROM postgres:15.4
+
+RUN apt-get update && apt-get install -y rsyslog
+COPY conf/postgres.conf /etc/postgresql/postgresql.conf
+COPY conf/rsyslog.conf /etc/rsyslog.d/10-postgresql.conf
+
+EXPOSE 5432

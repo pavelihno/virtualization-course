@@ -1,0 +1,130 @@
+version: '3'
+
+services:
+  
+  grails-app:
+    build: 
+      context: .
+      dockerfile: dockerfiles/grails
+    ports:
+      - 8080:8080
+    environment:
+      - PSQL_PORT=5432
+      - PSQL_DB=appDB
+      - PSQL_USER=admin
+      - PSQL_PASSWORD=12345678
+    depends_on:
+      - postgres
+  
+  postgres:
+    build:
+      context: .
+      dockerfile: dockerfiles/postgres
+    # rsyslogd -dn && rm -f /run/rsyslogd.pid && rsyslogd -dn -f /etc/rsyslog.d/10-postgresql.conf
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf && rsyslogd -dn && rm -f /run/rsyslogd.pid && rsyslogd -dn -f /etc/rsyslog.d/10-postgresql.conf
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: appDB
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 12345678
+    volumes:
+      - ./temp/psqlDB:/var/lib/postgresql/data
+      - ./temp/logs/psql:/var/log/postgresql
+
+  zabbix-server:
+    image: zabbix/zabbix-server-pgsql:latest
+    ports:
+      - 10051:10051
+    environment:
+      - DB_SERVER_HOST=postgres
+      - DB_SERVER_PORT=5432
+      - POSTGRES_DB=appDB
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=12345678
+    depends_on:
+      - postgres
+
+  zabbix-web:
+    image: zabbix/zabbix-web-nginx-pgsql:latest
+    ports:
+      - 8082:8080
+    environment:
+      - ZBX_SERVER_HOST=zabbix-server
+      - ZBX_SERVER_PORT=10051
+      - DB_SERVER_HOST=postgres
+      - DB_SERVER_PORT=5432
+      - POSTGRES_DB=appDB
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=12345678
+    depends_on:
+      - zabbix-server
+
+  postgres-exporter:
+    image: wrouesnel/postgres_exporter:latest
+    environment:
+      - DATA_SOURCE_NAME=postgresql://admin:12345678@postgres:5432/appDB?sslmode=disable
+    ports:
+      - 9187:9187
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - 9090:9090
+    volumes:
+      - ./conf/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - 3000:3000
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=12345678
+    depends_on:
+      - prometheus
+
+  mongo:
+    image: mongo:latest
+    volumes:
+      - ./temp/mongoDB:/data/db
+  
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.13
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - http.host=0.0.0.0
+      - transport.host=localhost
+      - network.host=0.0.0.0
+      - xpack.security.enabled=false
+    ports:
+      - 9200:9200
+    ulimits:
+      memlock:
+          soft: -1
+          hard: -1
+  
+  graylog:
+    image: graylog/graylog:5.1
+    environment:
+      - GRAYLOG_PASSWORD_SECRET=1234567812345678
+      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918 # admin
+      - GRAYLOG_HTTP_EXTERNAL_URI=http://localhost:9000/
+      - GRAYLOG_ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    entrypoint: /usr/bin/tini -- wait-for-it elasticsearch:9200 --  /docker-entrypoint.sh
+    ports:
+      - 9000:9000
+      - 1514:1514
+      - 1514:1514/udp
+      - 12201:12201
+      - 12201:12201/udp
+    depends_on:
+      - mongo
+      - elasticsearch
+
+  adminer:
+    image: adminer:latest
+    ports:
+      - 8081:8080
+    depends_on: 
+      - postgres

@@ -1,0 +1,16 @@
+FROM openjdk:17-jdk-slim
+
+RUN apt update -y && apt upgrade -y
+RUN apt install -y wget
+
+WORKDIR /app
+
+COPY . /app
+
+RUN wget -O /app/storage/images/image.png https://www.mirea.ru/upload/medialibrary/80f/MIREA_Gerb_Colour.png
+
+# RUN ./gradlew bootJar
+
+CMD ["java", "-jar", "/app/build/libs/docker-project.jar"]
+
+EXPOSE 8080
