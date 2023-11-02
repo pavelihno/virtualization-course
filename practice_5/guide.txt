@@ -1,0 +1,29 @@
+minikube start
+minikube docker-env
+@FOR /f "tokens=*" %i IN ('minikube -p minikube docker-env --shell cmd') DO @%i
+
+docker build -t local-nodejs .
+
+kubectl apply -f deployment.yaml
+
+kubectl get deployments
+kubectl get pods
+kubectl get events
+kubectl get services
+
+kubectl config view
+kubectl expose deployment/savinov-ikbo-16-20 --type=NodePort --port 8080
+kubectl delete service savinov-ikbo-16-20
+kubectl delete deployment savinov-ikbo-16-20
+
+kubectl apply -f service.yaml
+
+minikube service savinov-ikbo-16-20
+minikube dashboard
+
+minikube addons list
+minikube addons enable ingrees
+minikube addons disable ingrees
+
+kubectl get pod,svc -n kube-system
+

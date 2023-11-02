@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: savinov-ikbo-16-20
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: savinov-ikbo-16-20
+  template:
+    metadata:
+      labels:
+        app: savinov-ikbo-16-20
+    spec:
+      containers:
+      - name: savinov-ikbo-16-20-image
+        image: local-nodejs:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
