@@ -1,0 +1,39 @@
+minikube docker-env
+@FOR /f "tokens=*" %i IN ('minikube -p minikube docker-env --shell cmd') DO @%i
+
+minikube addons enable metrics-server
+kubectl get apiservices
+kubectl create namespace savinov-ikbo-16-20
+
+kubectl apply -f memory-request-limit.yaml --namespace=savinov-ikbo-16-20
+kubectl get pod memory-demo --namespace=savinov-ikbo-16-20
+kubectl get pod memory-demo --namespace=savinov-ikbo-16-20 --output=yaml
+kubectl top pod memory-demo --namespace=savinov-ikbo-16-20
+kubectl delete pod memory-demo --namespace=savinov-ikbo-16-20
+
+kubectl apply -f memory-request-limit-2.yaml --namespace=savinov-ikbo-16-20
+kubectl get pod memory-demo-2 --namespace=savinov-ikbo-16-20
+kubectl get pod memory-demo-2 --namespace=savinov-ikbo-16-20 --output=yaml
+kubectl describe pod memory-demo-2 --namespace=savinov-ikbo-16-20
+kubectl describe nodes
+kubectl delete pod memory-demo-2 --namespace=savinov-ikbo-16-20
+
+kubectl apply -f memory-request-limit-3.yaml --namespace=savinov-ikbo-16-20
+kubectl get pod memory-demo-3 --namespace=savinov-ikbo-16-20
+kubectl describe pod memory-demo-3 --namespace=savinov-ikbo-16-20
+kubectl delete pod memory-demo-3 --namespace=savinov-ikbo-16-20
+
+kubectl delete namespace savinov-ikbo-16-20
+kubectl create namespace savinov-ikbo-16-20
+
+kubectl apply -f cpu-request-limit.yaml --namespace=savinov-ikbo-16-20
+kubectl get pod cpu-demo --namespace=savinov-ikbo-16-20
+kubectl get pod cpu-demo --namespace=savinov-ikbo-16-20 --output=yaml
+kubectl top pod cpu-demo --namespace=savinov-ikbo-16-20
+kubectl delete pod cpu-demo --namespace=savinov-ikbo-16-20
+
+kubectl apply -f cpu-request-limit-2.yaml --namespace=savinov-ikbo-16-20
+kubectl get pod cpu-demo-2 --namespace=savinov-ikbo-16-20
+kubectl describe pod cpu-demo-2 --namespace=savinov-ikbo-16-20
+kubectl delete pod cpu-demo-2 --namespace=savinov-ikbo-16-20
+
