@@ -15,8 +15,8 @@ spec:
         run: fileserver
     spec:
       containers:
-      - image: pavelihno/static-files:latest
-        imagePullPolicy: IfNotPresent
+      - image: filebrowser/filebrowser
+        imagePullPolicy: Always
         name: fileserver
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File

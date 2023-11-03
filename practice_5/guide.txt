@@ -22,8 +22,8 @@ minikube service savinov-ikbo-16-20
 minikube dashboard
 
 minikube addons list
-minikube addons enable ingrees
-minikube addons disable ingrees
+minikube addons enable ingress
+minikube addons disable ingress
 
 kubectl get pod,svc -n kube-system
 

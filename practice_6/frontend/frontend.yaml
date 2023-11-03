@@ -15,7 +15,7 @@ spec:
         run: frontend
     spec:
       containers:
-      - image: pavelihno/journal-server:latest
+      - image: journal-server:latest
         imagePullPolicy: IfNotPresent
         name: frontend
         resources:

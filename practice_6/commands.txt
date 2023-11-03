@@ -4,23 +4,53 @@ minikube start
 minikube docker-env
 @FOR /f "tokens=*" %i IN ('minikube -p minikube docker-env --shell cmd') DO @%i
 
-kubectl create configmap frontend-config --from-literal=journalEntries=10
-kubectl create secret generic redis-passwd --from-literal=passwd=${RANDOM}
-kubectl create configmap redis-config --from-file=launch.sh=launch.sh
-
-docker build -t journal-server .
+docker build -t journal-server ./journal
 docker run --name journal-server journal-server
 
 docker build -t static-files .
 docker run --name static-files static-files
 
 kubectl create namespace savinov-ikbo-16-20
+kubectl delete namespace savinov-ikbo-16-20
+
+kubectl create configmap frontend-config --from-literal=journalEntries=10 --namespace=savinov-ikbo-16-20
+kubectl create secret generic redis-passwd --from-literal=passwd=12345678 --namespace=savinov-ikbo-16-20
+kubectl create configmap redis-config --from-file=redis/launch.sh --namespace=savinov-ikbo-16-20
+
+kubectl delete configmap frontend-config --namespace=savinov-ikbo-16-20
+kubectl delete secret redis-passwd --namespace=savinov-ikbo-16-20
+kubectl delete configmap redis-config --namespace=savinov-ikbo-16-20
 
 kubectl apply -f fileserver/fileserver.yaml --namespace=savinov-ikbo-16-20
 kubectl apply -f frontend/frontend-with-secret.yaml --namespace=savinov-ikbo-16-20
+kubectl apply -f frontend/ingress.yaml --namespace=savinov-ikbo-16-20
 kubectl apply -f redis/redis.yaml --namespace=savinov-ikbo-16-20
 
 kubectl apply -f fileserver/fileserver-service.yaml --namespace=savinov-ikbo-16-20
 kubectl apply -f frontend/frontend-service.yaml --namespace=savinov-ikbo-16-20
-kubectl apply -f redis/redis-service.yaml --namespace=savinov-ikbo-16-20
+kubectl apply -f redis/redis-write-service.yaml --namespace=savinov-ikbo-16-20
+kubectl apply -f redis/redis-read-service.yaml --namespace=savinov-ikbo-16-20
 
+kubectl delete deployment frontend --namespace=savinov-ikbo-16-20
+
+kubectl logs frontend-c59bb5fc6-kl59n
+
+kubectl get deployment --namespace=savinov-ikbo-16-20
+kubectl get statefulset --namespace=savinov-ikbo-16-20
+kubectl get ingress --namespace=savinov-ikbo-16-20
+kubectl get pod --namespace=savinov-ikbo-16-20
+kubectl get service --namespace=savinov-ikbo-16-20
+
+kubectl describe pod -n savinov-ikbo-16-20 -l app=redis
+kubectl describe pod -n savinov-ikbo-16-20 -l app=frontend
+kubectl describe pod -n savinov-ikbo-16-20 -l app=fileserver
+
+minikube service frontend -n savinov-ikbo-16-20
+minikube service redis-write -n savinov-ikbo-16-20
+minikube service redis -n savinov-ikbo-16-20
+
+minikube dashboard
+
+kubectl exec -it redis-1 -- /bin/sh
+
+kubectl exec -it fileserver-64cb4b9d66-fb2nz -- /bin/sh

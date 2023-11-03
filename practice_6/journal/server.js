@@ -1,9 +1,11 @@
 const http = require('http');
 const redis = require('redis');
+const fs = require('fs'); 
 
 const client = redis.createClient({
     'host': '127.0.0.1',
-    'port': 6379
+    'port': 6379,
+    'password': fs.readFileSync('/etc/redis-passwd/passwd')
 });
 
 const port = 8080;
@@ -64,6 +66,5 @@ server.listen(port, (err) => {
   if (err) {
     return console.log('could not start server', err);
   }
-
-  console.log('api server up and running.');
+  console.log('api server up and running');
 })

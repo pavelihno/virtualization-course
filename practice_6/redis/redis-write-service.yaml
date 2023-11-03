@@ -5,7 +5,6 @@ metadata:
     app: redis-write
   name: redis-write
 spec:
-  ClusterIP: None
   ports:
   - port: 6379
   selector:
