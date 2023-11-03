@@ -13,44 +13,36 @@ docker run --name static-files static-files
 kubectl create namespace savinov-ikbo-16-20
 kubectl delete namespace savinov-ikbo-16-20
 
-kubectl create configmap frontend-config --from-literal=journalEntries=10 --namespace=savinov-ikbo-16-20
-kubectl create secret generic redis-passwd --from-literal=passwd=12345678 --namespace=savinov-ikbo-16-20
-kubectl create configmap redis-config --from-file=redis/launch.sh --namespace=savinov-ikbo-16-20
+kubectl create configmap frontend-config --from-literal=journalEntries=10 
+kubectl create secret generic redis-passwd --from-literal=passwd=12345678 
+kubectl create configmap redis-config --from-file=redis/launch.sh 
 
-kubectl delete configmap frontend-config --namespace=savinov-ikbo-16-20
-kubectl delete secret redis-passwd --namespace=savinov-ikbo-16-20
-kubectl delete configmap redis-config --namespace=savinov-ikbo-16-20
+kubectl delete configmap frontend-config 
+kubectl delete secret redis-passwd 
+kubectl delete configmap redis-config 
 
-kubectl apply -f fileserver/fileserver.yaml --namespace=savinov-ikbo-16-20
-kubectl apply -f frontend/frontend-with-secret.yaml --namespace=savinov-ikbo-16-20
-kubectl apply -f frontend/ingress.yaml --namespace=savinov-ikbo-16-20
-kubectl apply -f redis/redis.yaml --namespace=savinov-ikbo-16-20
+kubectl apply -f fileserver/fileserver.yaml 
+kubectl apply -f frontend/frontend-with-secret.yaml 
+kubectl apply -f frontend/ingress.yaml 
+kubectl apply -f redis/redis.yaml 
 
-kubectl apply -f fileserver/fileserver-service.yaml --namespace=savinov-ikbo-16-20
-kubectl apply -f frontend/frontend-service.yaml --namespace=savinov-ikbo-16-20
-kubectl apply -f redis/redis-write-service.yaml --namespace=savinov-ikbo-16-20
-kubectl apply -f redis/redis-read-service.yaml --namespace=savinov-ikbo-16-20
+kubectl apply -f fileserver/fileserver-service.yaml
+kubectl apply -f frontend/frontend-service.yaml
+kubectl apply -f redis/redis-write-service.yaml
+kubectl apply -f redis/redis-read-service.yaml
 
-kubectl delete deployment frontend --namespace=savinov-ikbo-16-20
+kubectl delete deployment frontend 
 
-kubectl logs frontend-c59bb5fc6-kl59n
+kubectl logs frontend-c59bb5fc6-ltt8k
 
-kubectl get deployment --namespace=savinov-ikbo-16-20
-kubectl get statefulset --namespace=savinov-ikbo-16-20
-kubectl get ingress --namespace=savinov-ikbo-16-20
-kubectl get pod --namespace=savinov-ikbo-16-20
-kubectl get service --namespace=savinov-ikbo-16-20
+kubectl get deployment 
+kubectl get statefulset 
+kubectl get ingress 
+kubectl get pod 
+kubectl get service
 
-kubectl describe pod -n savinov-ikbo-16-20 -l app=redis
-kubectl describe pod -n savinov-ikbo-16-20 -l app=frontend
-kubectl describe pod -n savinov-ikbo-16-20 -l app=fileserver
-
-minikube service frontend -n savinov-ikbo-16-20
-minikube service redis-write -n savinov-ikbo-16-20
-minikube service redis -n savinov-ikbo-16-20
+minikube service frontend
+minikube service redis-write
+minikube service redis
 
 minikube dashboard
-
-kubectl exec -it redis-1 -- /bin/sh
-
-kubectl exec -it fileserver-64cb4b9d66-fb2nz -- /bin/sh

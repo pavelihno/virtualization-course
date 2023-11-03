@@ -3,9 +3,10 @@ const redis = require('redis');
 const fs = require('fs'); 
 
 const client = redis.createClient({
-    'host': '127.0.0.1',
-    'port': 6379,
-    'password': fs.readFileSync('/etc/redis-passwd/passwd')
+    'url': 'redis://redis.default:6379',
+    'username': 'default',
+    'password': fs.readFileSync('/etc/redis-passwd/passwd'),
+    'legacyMode': true
 });
 
 const port = 8080;
