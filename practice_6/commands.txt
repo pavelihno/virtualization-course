@@ -5,12 +5,6 @@ minikube docker-env
 docker build -t journal-server ./journal
 docker run --name journal-server journal-server
 
-docker build -t static-files .
-docker run --name static-files static-files
-
-kubectl create namespace savinov-ikbo-16-20
-kubectl delete namespace savinov-ikbo-16-20
-
 kubectl create configmap frontend-config --from-literal=journalEntries=10 
 kubectl create secret generic redis-passwd --from-literal=passwd=12345678
 kubectl create configmap redis-config --from-file=redis/launch.sh 
@@ -35,22 +29,7 @@ kubectl delete deployment frontend
 
 kubectl logs frontend-c59bb5fc6-ltt8k
 
-kubectl get deployment 
-kubectl get statefulset 
-kubectl get ingress 
-kubectl get pod 
-kubectl get service
-
-minikube service frontend
-minikube service redis-write
-minikube service redis
-
-minikube dashboard
-
 minikube service -n ingress-nginx ingress-nginx-controller
-minikube service frontend-ingress
-minikube service fileserver
 minikube service redis-commander
-minikube service redis
-
-kubectl exec -it redis-1 -- /bin/sh
+minikube service fileserver
+minikube dashboard
