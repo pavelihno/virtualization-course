@@ -28,7 +28,7 @@ spec:
         - name: passwd-volume
           mountPath: /etc/redis-passwd
         command:
-        - sh
+        - /bin/sh
         - -c
         - /script/launch.sh
       volumes:

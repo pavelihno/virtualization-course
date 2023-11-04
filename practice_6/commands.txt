@@ -1,5 +1,3 @@
-# запуск minikube 
-
 minikube start
 minikube docker-env
 @FOR /f "tokens=*" %i IN ('minikube -p minikube docker-env --shell cmd') DO @%i
@@ -14,7 +12,7 @@ kubectl create namespace savinov-ikbo-16-20
 kubectl delete namespace savinov-ikbo-16-20
 
 kubectl create configmap frontend-config --from-literal=journalEntries=10 
-kubectl create secret generic redis-passwd --from-literal=passwd=12345678 
+kubectl create secret generic redis-passwd --from-literal=passwd=12345678
 kubectl create configmap redis-config --from-file=redis/launch.sh 
 
 kubectl delete configmap frontend-config 
@@ -25,11 +23,13 @@ kubectl apply -f fileserver/fileserver.yaml
 kubectl apply -f frontend/frontend-with-secret.yaml 
 kubectl apply -f frontend/ingress.yaml 
 kubectl apply -f redis/redis.yaml 
+kubectl apply -f redis/redis-commander.yaml 
 
 kubectl apply -f fileserver/fileserver-service.yaml
 kubectl apply -f frontend/frontend-service.yaml
 kubectl apply -f redis/redis-write-service.yaml
 kubectl apply -f redis/redis-read-service.yaml
+kubectl apply -f redis/redis-commander-service.yaml
 
 kubectl delete deployment frontend 
 
@@ -46,3 +46,11 @@ minikube service redis-write
 minikube service redis
 
 minikube dashboard
+
+minikube service -n ingress-nginx ingress-nginx-controller
+minikube service frontend-ingress
+minikube service fileserver
+minikube service redis-commander
+minikube service redis
+
+kubectl exec -it redis-1 -- /bin/sh
