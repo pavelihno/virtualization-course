@@ -6,7 +6,6 @@ buildSrc/
 bin/
 temp/
 target/
-gradle/
 out/
 .idea
 *.iml
