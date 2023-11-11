@@ -1,0 +1,18 @@
+1) Spring Boot x2 
+2) Postgres x2
+3) Redis
+4) Kafka
+5) KrakenD
+6) Graylog
+7) Prometheus
+8) Grafana
+9) Jaeger
+
+
+kubectl apply -f redis/commander.yaml
+kubectl apply -f redis/statefulset.yaml
+kubectl apply -f redis/service.yaml
+kubectl apply -f passwords.yaml
+minikube service redis-commander
+
+kubectl delete statefulset redis
