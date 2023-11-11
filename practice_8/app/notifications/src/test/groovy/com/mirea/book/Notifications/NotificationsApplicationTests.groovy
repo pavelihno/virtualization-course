@@ -1,4 +1,4 @@
-package com.mirea.book.Notifications
+package com.mirea.book.notifications
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

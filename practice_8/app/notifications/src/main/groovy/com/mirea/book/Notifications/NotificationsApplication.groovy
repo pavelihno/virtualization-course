@@ -1,4 +1,4 @@
-package com.mirea.book.Notifications
+package com.mirea.book.notifications
 
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
