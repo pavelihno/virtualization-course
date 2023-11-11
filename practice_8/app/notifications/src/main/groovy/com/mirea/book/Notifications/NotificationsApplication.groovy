@@ -1,13 +1,13 @@
-package com.mirea.book.order
+package com.mirea.book.Notifications
 
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 
 @SpringBootApplication
-class OrderApplication {
+class NotificationsApplication {
 
 	static void main(String[] args) {
-		SpringApplication.run(OrderApplication, args)
+		SpringApplication.run(NotificationsApplication, args)
 	}
 
 }

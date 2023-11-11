@@ -2,23 +2,23 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   labels:
-    app: order-db
+    app: notifications-db
     type: local
-  name: order-db-pv
+  name: notifications-db-pv
 spec:
   storageClassName: manual
   capacity:
     storage: 100Mi
   accessModes: [ "ReadWriteOnce" ]
   hostPath:
-    path: "/run/desktop/mnt/host/c/Users/Pavel/temp/orderDB"
+    path: "/run/desktop/mnt/host/c/Users/Pavel/temp/notificationsDB"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   labels:
-    app: order-db
-  name: order-db-pvc
+    app: notifications-db
+  name: notifications-db-pvc
 spec:
   accessModes: [ "ReadWriteOnce" ]
   resources:
@@ -29,53 +29,52 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: order-db
-  name: order-db
+    app: notifications-db
+  name: notifications-db
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: order-db
+      app: notifications-db
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: order-db
+        app: notifications-db
     spec:
       containers:
-        - name: order-db
+        - name: notifications-db
           image: postgres:15
           env:
           - name: POSTGRES_DB
-            value: 'orderDB'
+            value: 'notificationsDB'
           - name: POSTGRES_USER
             value: 'admin'
           - name: POSTGRES_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: order-db-passwd
+                name: notifications-db-passwd
                 key: passwd
           ports:
             - containerPort: 5432
-              name: order-db
           volumeMounts:
-            - name: order-db-volume
+            - name: notifications-db-volume
               mountPath: /var/lib/postgresql/data
       volumes:
-        - name: order-db-volume
+        - name: notifications-db-volume
           persistentVolumeClaim:
-            claimName: order-db-pvc
+            claimName: notifications-db-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: order-db
-  name: order-db
+    app: notifications-db
+  name: notifications-db
 spec:
   ports:
   - port: 5432
     targetPort: 5432
   selector:
-    app: order-db
+    app: notifications-db

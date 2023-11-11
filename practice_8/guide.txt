@@ -22,6 +22,12 @@ minikube service redis-commander
 Database
 ==========
 kubectl apply -f db/catalog-db.yaml
-kubectl apply -f db/order-db.yaml
+kubectl apply -f db/notifications-db.yaml
 kubectl apply -f db/adminer.yaml
 minikube service adminer
+
+==========
+Kafka
+==========
+kubectl apply -f kafka/zookeeper.yaml
+kubectl apply -f kafka/kafka-broker.yaml

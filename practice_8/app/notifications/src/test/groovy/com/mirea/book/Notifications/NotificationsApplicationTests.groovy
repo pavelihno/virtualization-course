@@ -1,10 +1,10 @@
-package com.mirea.book.order
+package com.mirea.book.Notifications
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class OrderApplicationTests {
+class NotificationsApplicationTests {
 
 	@Test
 	void contextLoads() {
