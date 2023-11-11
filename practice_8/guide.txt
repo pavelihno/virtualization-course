@@ -14,17 +14,14 @@ kubectl apply -f passwords.yaml
 ==========
 REDIS 
 ==========
+kubectl apply -f redis/redis.yaml
 kubectl apply -f redis/commander.yaml
-kubectl apply -f redis/statefulset.yaml
-kubectl apply -f redis/service.yaml
 minikube service redis-commander
 
 ==========
 Database
 ==========
-kubectl apply -f db/catalogDB/deployment.yaml
-kubectl apply -f db/catalogDB/service.yaml
-kubectl apply -f db/orderDB/deployment.yaml
-kubectl apply -f db/orderDB/service.yaml
+kubectl apply -f db/catalog-db.yaml
+kubectl apply -f db/order-db.yaml
 kubectl apply -f db/adminer.yaml
 minikube service adminer

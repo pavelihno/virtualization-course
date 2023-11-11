@@ -66,3 +66,16 @@ spec:
         - name: order-db-volume
           persistentVolumeClaim:
             claimName: order-db-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: order-db
+  name: order-db
+spec:
+  ports:
+  - port: 5432
+    targetPort: 5432
+  selector:
+    app: order-db

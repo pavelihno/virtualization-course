@@ -66,3 +66,16 @@ spec:
         - name: catalog-db-volume
           persistentVolumeClaim:
             claimName: catalog-db-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: catalog-db
+  name: catalog-db
+spec:
+  ports:
+  - port: 5432
+    targetPort: 5432
+  selector:
+    app: catalog-db

@@ -49,3 +49,32 @@ spec:
       resources:
         requests:
           storage: 500Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: redis-read
+  name: redis-read
+spec:
+  ports:
+  - port: 6379
+    protocol: TCP
+    targetPort: 6379
+  selector:
+    app: redis
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: redis-write
+  name: redis-write
+spec:
+  ports:
+  - port: 6379
+  selector:
+    app: redis
+    statefulset.kubernetes.io/pod-name: redis-0
