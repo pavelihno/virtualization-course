@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  labels:
+    app: catalog-db
+    type: local
+  name: catalog-db-pv
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 100Mi
+  accessModes: [ "ReadWriteOnce" ]
+  hostPath:
+    path: "/run/desktop/mnt/host/c/Users/Pavel/temp/catalogDB"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: catalog-db
+  name: catalog-db-pvc
+spec:
+  accessModes: [ "ReadWriteOnce" ]
+  resources:
+    requests:
+      storage: 500Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: catalog-db
+  name: catalog-db
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: catalog-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: catalog-db
+    spec:
+      containers:
+        - name: catalog-db
+          image: postgres:15
+          env:
+          - name: POSTGRES_DB
+            value: 'catalogDB'
+          - name: POSTGRES_USER
+            value: 'admin'
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: catalog-db-passwd
+                key: passwd
+          ports:
+            - containerPort: 5432
+              name: catalog-db
+          volumeMounts:
+            - name: catalog-db-volume
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: catalog-db-volume
+          persistentVolumeClaim:
+            claimName: catalog-db-pvc

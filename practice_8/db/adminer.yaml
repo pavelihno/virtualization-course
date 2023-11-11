@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: adminer
+  name: adminer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adminer
+  template:
+    metadata:
+      labels:
+        app: adminer
+    spec:
+      containers:
+      - name: adminer
+        image: adminer:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ADMINER_DESIGN
+          value: 'nette'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: adminer
+  name: adminer
+spec:
+  selector:
+    app: adminer
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080

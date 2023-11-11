@@ -6,7 +6,7 @@ metadata:
   name: redis
 spec:
   serviceName: redis
-  replicas: 3
+  replicas: 2
   selector: 
     matchLabels:
       app: redis
@@ -48,4 +48,4 @@ spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
-          storage: 1Gi
+          storage: 500Mi
