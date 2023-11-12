@@ -12,15 +12,12 @@ public class Customer {
     @Id
     @GeneratedValue
     Long id
-    
-    @Column
-    String email
+
+    @Column(unique=true)
+    String username
 
     @Column
     String password
-
-    @Column
-    String username
 
     @Column(name='last_read_notification_timestamp')
     Date lastReadNotificationTimestamp

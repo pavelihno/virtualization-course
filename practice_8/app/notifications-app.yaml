@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: notifications
+  name: notifications
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: notifications
+  template:
+    metadata:
+      labels:
+        app: notifications
+    spec:
+      containers:
+      - image: notifications-app:latest
+        imagePullPolicy: Never
+        name: frontend
+        env:
+        - name: NOTIFICATIONS_DB_URL
+          value: "notifications-db"
+        - name: NOTIFICATIONS_DB_PORT
+          value: "5432"
+        - name: NOTIFICATIONS_DB
+          value: "notificationsDB"
+        - name: NOTIFICATIONS_DB_USERNAME
+          value: "admin"
+        - name: NOTIFICATIONS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: notifications-db-passwd
+              key: passwd
+        - name: REDIS_WRITE_HOST
+          value: "redis-write"
+        - name: REDIS_WRITE_PORT
+          value: "6379"
+        - name: REDIS_READ_HOST
+          value: "redis-read"
+        - name: REDIS_READ_PORT
+          value: "6379"
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redis-passwd
+              key: passwd
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: notifications
+  name: notifications
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: notifications
+  sessionAffinity: None
+  type: ClusterIP

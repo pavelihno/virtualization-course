@@ -8,10 +8,10 @@ metadata:
 spec:
   storageClassName: manual
   capacity:
-    storage: 100Mi
+    storage: 500Mi
   accessModes: [ "ReadWriteOnce" ]
   hostPath:
-    path: "/run/desktop/mnt/host/c/Users/Pavel/temp/notificationsDB"
+    path: notificationsData
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -58,6 +58,7 @@ spec:
                 key: passwd
           ports:
             - containerPort: 5432
+              name: main-port
           volumeMounts:
             - name: notifications-db-volume
               mountPath: /var/lib/postgresql/data
