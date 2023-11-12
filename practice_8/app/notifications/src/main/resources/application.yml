@@ -1,0 +1,42 @@
+spring:
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyHbmImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  
+  datasource:
+    hikari:
+      connectionTimeout: 20000
+      maximumPoolSize: 5
+    url: jdbc:postgresql://${NOTIFICATIONS_DB_URL}:${NOTIFICATIONS_DB_PORT}/${NOTIFICATIONS_DB}
+    username: ${NOTIFICATIONS_DB_USERNAME}
+    password: ${NOTIFICATIONS_DB_PASSWORD}
+
+  redis:
+    host: redis-write
+    port: 6379
+    password: ${REDIS_PASSWORD}
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 2
+        max-wait: -1
+        shutdown-timeout: 200ms
+    ssl: false
+    cluster:
+      nodes:
+        - redis-write:6379
+        - redis-read:6380
+        # - redis-read:6379
+  
+  session:
+      store-type: redis
+
+server:
+  servlet:
+    session:
+      timeout: 50s
