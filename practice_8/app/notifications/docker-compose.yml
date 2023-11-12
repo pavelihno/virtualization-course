@@ -1,0 +1,65 @@
+version: '3'
+
+services:
+  
+  grails-app:
+    build: 
+      context: .
+    ports:
+      - 8080:8080
+    environment:
+      - NOTIFICATIONS_DB_URL=postgres
+      - NOTIFICATIONS_DB_PORT=5432
+      - NOTIFICATIONS_DB=appDB
+      - NOTIFICATIONS_DB_USERNAME=admin
+      - NOTIFICATIONS_DB_PASSWORD=12345678
+      - REDIS_PASSWORD=12345678
+    depends_on:
+      - postgres
+      - redis-write
+      - redis-read
+  
+  postgres:
+    image: postgres:15  
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: appDB
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 12345678
+    volumes:
+      - ./temp/psqlDB:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer:latest
+    ports:
+      - 8081:8080
+    depends_on: 
+      - postgres
+
+  redis-write:
+    image: redis:7.2.1-alpine
+    ports:
+      - 6379:6379
+    command: redis-server --requirepass "${REDIS_PASSWORD}"
+    environment:
+      REDIS_PASSWORD: 12345678
+
+  redis-read:
+    image: redis:7.2.1-alpine
+    ports:
+      - 6380:6379
+    command: redis-server --slaveof "redis-write" 6379 --masterauth "${REDIS_PASSWORD}" --requirepass "${REDIS_PASSWORD}"
+    environment:
+      REDIS_PASSWORD: 12345678
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    ports:
+      - 8082:8081
+    environment:
+      REDIS_HOSTS: local:redis-write:6379
+      REDIS_PASSWORD: 12345678
+    depends_on:
+      - redis-write
+      - redis-read
