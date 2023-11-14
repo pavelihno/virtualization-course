@@ -3,9 +3,7 @@ package com.mirea.book.notifications
 import java.util.Date
 
 import jakarta.persistence.*
-import lombok.Data
 
-@Data
 @Entity
 public class Customer {
     
@@ -21,4 +19,27 @@ public class Customer {
 
     @Column(name='last_read_notification_timestamp')
     Date lastReadNotificationTimestamp
+
+    public Customer() {}
+
+    public Customer(String username, String password) {
+        this.username = username
+        this.password = password
+    }
+    
+    public String getUsername() {
+        return username
+    }
+
+    public void setUsername(String username) {
+        this.username = username
+    }
+
+    public String getPassword() {
+        return password
+    }
+
+    public void setPassword(String password) {
+        this.password = password
+    }
 }

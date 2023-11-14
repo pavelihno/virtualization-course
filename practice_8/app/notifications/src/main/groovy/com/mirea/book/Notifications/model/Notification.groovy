@@ -3,9 +3,7 @@ package com.mirea.book.notifications
 import java.util.Date
 
 import jakarta.persistence.*
-import lombok.Data
 
-@Data
 @Entity
 public class Notification {
     
@@ -21,4 +19,28 @@ public class Notification {
     
     @Column
     Date timestamp
+
+    public String getTitle() {
+        return title
+    }
+
+    public void setTitle(String title) {
+        this.title = title
+    }
+
+    public String getText() {
+        return text
+    }
+
+    public void setText(String text) {
+        this.text = text
+    }
+
+    public Date getTimestamp() {
+        return timestamp
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp
+    }
 }
