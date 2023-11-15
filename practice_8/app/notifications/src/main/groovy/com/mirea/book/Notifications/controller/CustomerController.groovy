@@ -52,14 +52,14 @@ public class CustomerController {
         return ResponseEntity.ok().body(sessionToken)
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<String> logoutCustomer(@RequestHeader("Authorization") String sessionToken) {
+    @PostMapping('/logout')
+    public ResponseEntity<String> logoutCustomer(@RequestHeader('Authorization') String sessionToken) {
         Boolean deleted = redisTemplate.delete(sessionToken)
 
         if (deleted != null && deleted) {
-            return ResponseEntity.ok("Logout successful")
+            return ResponseEntity.ok('Logout successful')
         } else {
-            return ResponseEntity.badRequest().body("Invalid session token")
+            return ResponseEntity.badRequest().body('Invalid session token')
         }
     }
 }

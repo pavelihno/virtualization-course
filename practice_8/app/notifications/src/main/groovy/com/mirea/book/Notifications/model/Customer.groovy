@@ -42,4 +42,8 @@ public class Customer {
     public void setPassword(String password) {
         this.password = password
     }
+
+    public void setLastReadNotificationTimestamp(Date lastReadNotificationTimestamp) {
+        this.lastReadNotificationTimestamp = lastReadNotificationTimestamp
+    }
 }
