@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: catalog
+  name: catalog
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: catalog
+  template:
+    metadata:
+      labels:
+        app: catalog
+    spec:
+      containers:
+      - image: catalog-app:latest
+        imagePullPolicy: Never
+        name: frontend
+        env:
+        - name: CATALOG_DB_URL
+          value: "catalog-db"
+        - name: CATALOG_DB_PORT
+          value: "5432"
+        - name: CATALOG_DB
+          value: "catalogDB"
+        - name: CATALOG_DB_USERNAME
+          value: "admin"
+        - name: CATALOG_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: catalog-db-passwd
+              key: passwd
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: catalog
+  name: catalog
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: catalog
+  sessionAffinity: None
+  type: ClusterIP

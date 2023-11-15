@@ -9,6 +9,10 @@
 9) Jaeger
 
 
+minikube start
+minikube docker-env
+@FOR /f "tokens=*" %i IN ('minikube -p minikube docker-env --shell cmd') DO @%i
+
 kubectl apply -f passwords.yaml
 
 ==========
@@ -31,3 +35,21 @@ Kafka
 ==========
 kubectl apply -f kafka/zookeeper.yaml
 kubectl apply -f kafka/kafka-broker.yaml
+
+==========
+Notifications (app)
+==========
+docker build -t notifications-app ./app/notifications
+kubectl apply -f app/notifications-app.yaml
+
+==========
+Catalog (app)
+==========
+docker build -t catalog-app ./app/catalog
+kubectl apply -f app/catalog-app.yaml
+
+==========
+TEST
+==========
+docker-compose build
+docker-compose up
