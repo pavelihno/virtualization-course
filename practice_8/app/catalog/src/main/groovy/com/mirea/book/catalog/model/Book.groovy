@@ -1,9 +1,7 @@
 package com.mirea.book.catalog
 
 import jakarta.persistence.*
-import lombok.Data
 
-@Data
 @Entity
 public class Book {
     
