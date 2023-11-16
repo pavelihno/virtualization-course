@@ -1,8 +1,5 @@
 package com.mirea.book.notifications
 
-import java.util.List
-import java.util.Date
-
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity

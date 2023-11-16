@@ -1,8 +1,6 @@
 package com.mirea.book.catalog
 
-import java.util.UUID
-import java.util.concurrent.TimeUnit
-
+import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -13,6 +11,9 @@ public class BookController {
 
     @Autowired
     private BookRepository bookRepository
+
+    @Autowired
+    private KafkaTemplate<String, BookDTO> kafkaTemplate
 
     @GetMapping('/list')
     public ResponseEntity<List<Book>> getAllBooks() {
@@ -34,6 +35,8 @@ public class BookController {
         book.setTitle(bookDTO.getTitle())
         book.setYear(bookDTO.getYear())
         book.setGenre(bookDTO.getGenre())
+
+        kafkaTemplate.send("book-created", bookDTO)
         
         return ResponseEntity.ok(bookRepository.save(book))
     }

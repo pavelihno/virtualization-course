@@ -1,7 +1,5 @@
 package com.mirea.book.notifications
 
-import java.util.Date
-
 import jakarta.persistence.*
 
 @Entity

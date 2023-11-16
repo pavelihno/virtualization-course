@@ -18,6 +18,8 @@ services:
       - REDIS_READ_HOST=redis-read
       - REDIS_READ_PORT=6380
       - REDIS_PASSWORD=12345678
+      - KAFKA_URL=kafka-broker
+      - KAFKA_PORT=9092
     depends_on:
       - postgres
       - redis-write
@@ -34,6 +36,8 @@ services:
       - CATALOG_DB=appDB
       - CATALOG_DB_USERNAME=admin
       - CATALOG_DB_PASSWORD=12345678
+      - KAFKA_URL=kafka-broker
+      - KAFKA_PORT=9092
     depends_on:
       - postgres
 

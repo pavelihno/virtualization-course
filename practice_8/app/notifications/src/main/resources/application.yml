@@ -29,6 +29,11 @@ spring:
   session:
     store-type: redis
 
+  kafka:
+    bootstrap-servers: ${KAFKA_URL}:${KAFKA_PORT}
+    consumer:
+      group-id: notifications-group
+
 server:
   servlet:
     session:

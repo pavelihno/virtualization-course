@@ -1,8 +1,5 @@
 package com.mirea.book.notifications
 
-import java.util.UUID
-import java.util.concurrent.TimeUnit
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.redis.core.RedisTemplate
