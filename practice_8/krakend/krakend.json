@@ -1,0 +1,123 @@
+{
+    "$schema": "https://www.krakend.io/schema/v2.5/krakend.json",
+    "version": 3,
+    "endpoints": [
+        {
+            "endpoint": "/customer/register",
+            "method": "POST",
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "url_pattern": "/customer/register",
+                    "host": ["notifications-app:8080"],
+                    "encoding": "no-op"
+                }
+            ],
+            "input_headers": ["*"]
+        },
+        {
+            "endpoint": "/customer/login",
+            "method": "POST",
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "url_pattern": "/customer/login",
+                    "host": ["notifications-app:8080"],
+                    "encoding": "no-op"
+                }
+            ],
+            "input_headers": ["*"]
+        },
+        {
+            "endpoint": "/customer/logout",
+            "method": "POST",
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "url_pattern": "/customer/logout",
+                    "host": ["notifications-app:8080"],
+                    "encoding": "no-op"
+                }
+            ],
+            "input_headers": ["*"]
+        },
+        {
+            "endpoint": "/notifications/unread",
+            "method": "GET",
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "url_pattern": "/notifications/unread",
+                    "host": ["notifications-app:8080"],
+                    "encoding": "no-op"
+                }
+            ],
+            "input_headers": ["*"]
+        },
+        {
+            "endpoint": "/catalog/books/list",
+            "method": "GET",
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "url_pattern": "/books/list",
+                    "host": ["catalog-app:8080"],
+                    "encoding": "no-op"
+                }
+            ],
+            "input_headers": ["*"]
+        },
+        {
+            "endpoint": "/catalog/books/{id}",
+            "method": "GET",
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "url_pattern": "/books/{id}",
+                    "host": ["catalog-app:8080"],
+                    "encoding": "no-op"
+                }
+            ],
+            "input_headers": ["*"]
+        },
+        {
+            "endpoint": "/catalog/books",
+            "method": "POST",
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "url_pattern": "/books",
+                    "host": ["catalog-app:8080"],
+                    "encoding": "no-op"
+                }
+            ],
+            "input_headers": ["*"]
+        },
+        {
+            "endpoint": "/catalog/books/{id}",
+            "method": "PUT",
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "url_pattern": "/books/{id}",
+                    "host": ["catalog-app:8080"],
+                    "encoding": "no-op"
+                }
+            ],
+            "input_headers": ["*"]
+        },
+        {
+            "endpoint": "/catalog/books/{id}",
+            "method": "DELETE",
+            "output_encoding": "no-op",
+            "backend": [
+                {
+                    "url_pattern": "/books/{id}",
+                    "host": ["catalog-app:8080"],
+                    "encoding": "no-op"
+                }
+            ],
+            "input_headers": ["*"]
+        }
+    ]
+}
