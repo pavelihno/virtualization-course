@@ -1,6 +1,16 @@
 {
     "$schema": "https://www.krakend.io/schema/v2.5/krakend.json",
     "version": 3,
+    "extra_config": {
+        "telemetry/gelf": {
+            "address": "graylog:12201",
+            "enable_tcp": false
+        },
+        "telemetry/logging": {
+            "level": "DEBUG",
+            "prefix": "[KRAKEND]"
+        }
+    },
     "endpoints": [
         {
             "endpoint": "/customer/register",

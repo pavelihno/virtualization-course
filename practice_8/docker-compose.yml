@@ -5,8 +5,6 @@ services:
   notifications-app:
     build: 
       context: ./app/notifications
-    # ports:
-    #   - 8080:8080
     environment:
       - NOTIFICATIONS_DB_URL=postgres
       - NOTIFICATIONS_DB_PORT=5432
@@ -28,8 +26,6 @@ services:
   catalog-app:
     build: 
       context: ./app/catalog
-    # ports:
-    #   - 8080:8080
     environment:
       - CATALOG_DB_URL=postgres
       - CATALOG_DB_PORT=5432
@@ -52,13 +48,6 @@ services:
     volumes:
       - ./temp/psqlDB:/var/lib/postgresql/data
 
-  # adminer:
-  #   image: adminer:latest
-  #   ports:
-  #     - 8080:8080
-  #   depends_on: 
-  #     - postgres
-
   redis-write:
     image: redis:7.2.1-alpine
     ports:
@@ -78,13 +67,20 @@ services:
   # redis-commander:
   #   image: rediscommander/redis-commander:latest
   #   ports:
-  #     - 8084:8081
+  #     - 8081:8081
   #   environment:
   #     - REDIS_HOSTS=local:redis-write:6379
   #     - REDIS_PASSWORD=12345678
   #   depends_on:
   #     - redis-write
   #     - redis-read
+
+  # adminer:
+  #   image: adminer:latest
+  #   ports:
+  #     - 8082:8080
+  #   depends_on: 
+  #     - postgres
   
   zookeeper:
     image: wurstmeister/zookeeper
@@ -109,4 +105,42 @@ services:
       - ./krakend/krakend.json:/etc/krakend/krakend.json
     ports:
       - 8080:8080
+    depends_on:
+      - notifications-app
+      - catalog-app
+
+  mongo:
+    image: mongo:latest
+    volumes:
+      - ./temp/mongoDB:/data/db
   
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.13
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - http.host=0.0.0.0
+      - transport.host=localhost
+      - network.host=0.0.0.0
+      - xpack.security.enabled=false
+    ports:
+      - 9200:9200
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+  
+  graylog:
+    image: graylog/graylog:5.2
+    environment:
+      - GRAYLOG_PASSWORD_SECRET=1234567812345678
+      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918 # admin
+      - GRAYLOG_HTTP_EXTERNAL_URI=http://localhost:9000/
+      - GRAYLOG_ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    entrypoint: /usr/bin/tini -- wait-for-it elasticsearch:9200 --  /docker-entrypoint.sh
+    ports:
+      - 9000:9000
+      - 12201:12201
+      - 12201:12201/udp
+    depends_on:
+      - mongo
+      - elasticsearch
