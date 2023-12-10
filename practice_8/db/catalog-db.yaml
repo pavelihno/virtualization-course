@@ -32,7 +32,7 @@ metadata:
     app: catalog-db
   name: catalog-db
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: catalog-db

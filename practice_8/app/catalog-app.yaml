@@ -5,7 +5,7 @@ metadata:
     app: catalog
   name: catalog
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: catalog
@@ -15,7 +15,7 @@ spec:
         app: catalog
     spec:
       containers:
-      - image: catalog-app:latest
+      - image: catalog:latest
         imagePullPolicy: Never
         name: frontend
         env:

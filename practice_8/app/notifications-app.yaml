@@ -5,7 +5,7 @@ metadata:
     app: notifications
   name: notifications
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: notifications
@@ -15,7 +15,7 @@ spec:
         app: notifications
     spec:
       containers:
-      - image: notifications-app:latest
+      - image: notifications:latest
         imagePullPolicy: Never
         name: frontend
         env:

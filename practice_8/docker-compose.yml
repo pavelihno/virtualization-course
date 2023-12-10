@@ -2,7 +2,7 @@ version: '3'
 
 services:
   
-  notifications-app:
+  notifications:
     build: 
       context: ./app/notifications
     environment:
@@ -23,7 +23,7 @@ services:
       - redis-write
       - redis-read
   
-  catalog-app:
+  catalog:
     build: 
       context: ./app/catalog
     environment:
@@ -100,14 +100,13 @@ services:
       - zookeeper
   
   krakend:
-    image: devopsfaith/krakend
-    volumes:
-      - ./krakend/krakend.json:/etc/krakend/krakend.json
+    build: 
+      context: ./krakend
     ports:
       - 8080:8080
     depends_on:
-      - notifications-app
-      - catalog-app
+      - notifications
+      - catalog
 
   mongo:
     image: mongo:latest
