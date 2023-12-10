@@ -19,7 +19,7 @@
             "backend": [
                 {
                     "url_pattern": "/customer/register",
-                    "host": ["notifications-app:8080"],
+                    "host": ["notifications:8080"],
                     "encoding": "no-op"
                 }
             ],
@@ -32,7 +32,7 @@
             "backend": [
                 {
                     "url_pattern": "/customer/login",
-                    "host": ["notifications-app:8080"],
+                    "host": ["notifications:8080"],
                     "encoding": "no-op"
                 }
             ],
@@ -45,7 +45,7 @@
             "backend": [
                 {
                     "url_pattern": "/customer/logout",
-                    "host": ["notifications-app:8080"],
+                    "host": ["notifications:8080"],
                     "encoding": "no-op"
                 }
             ],
@@ -58,7 +58,7 @@
             "backend": [
                 {
                     "url_pattern": "/notifications/unread",
-                    "host": ["notifications-app:8080"],
+                    "host": ["notifications:8080"],
                     "encoding": "no-op"
                 }
             ],
@@ -71,7 +71,7 @@
             "backend": [
                 {
                     "url_pattern": "/books/list",
-                    "host": ["catalog-app:8080"],
+                    "host": ["catalog:8080"],
                     "encoding": "no-op"
                 }
             ],
@@ -84,7 +84,7 @@
             "backend": [
                 {
                     "url_pattern": "/books/{id}",
-                    "host": ["catalog-app:8080"],
+                    "host": ["catalog:8080"],
                     "encoding": "no-op"
                 }
             ],
@@ -97,7 +97,7 @@
             "backend": [
                 {
                     "url_pattern": "/books",
-                    "host": ["catalog-app:8080"],
+                    "host": ["catalog:8080"],
                     "encoding": "no-op"
                 }
             ],
@@ -110,7 +110,7 @@
             "backend": [
                 {
                     "url_pattern": "/books/{id}",
-                    "host": ["catalog-app:8080"],
+                    "host": ["catalog:8080"],
                     "encoding": "no-op"
                 }
             ],
@@ -123,7 +123,7 @@
             "backend": [
                 {
                     "url_pattern": "/books/{id}",
-                    "host": ["catalog-app:8080"],
+                    "host": ["catalog:8080"],
                     "encoding": "no-op"
                 }
             ],

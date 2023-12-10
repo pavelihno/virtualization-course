@@ -39,14 +39,29 @@ kubectl apply -f kafka/kafka-broker.yaml
 ==========
 Notifications (app)
 ==========
-docker build -t notifications-app ./app/notifications
+docker build -t notifications ./app/notifications
 kubectl apply -f app/notifications-app.yaml
 
 ==========
 Catalog (app)
 ==========
-docker build -t catalog-app ./app/catalog
+docker build -t catalog ./app/catalog
 kubectl apply -f app/catalog-app.yaml
+
+==========
+KrakenD
+==========
+docker build -t krakend ./krakend
+kubectl apply -f krakend/krakend.yaml
+minikube service krakend
+
+==========
+Graylog
+==========
+kubectl apply -f graylog/mongo-db.yaml
+kubectl apply -f graylog/elasticsearch.yaml
+kubectl apply -f graylog/graylog.yaml
+minikube service graylog
 
 ==========
 TEST

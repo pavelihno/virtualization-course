@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: krakend
+  name: krakend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: krakend
+  template:
+    metadata:
+      labels:
+        app: krakend
+    spec:
+      containers:
+      - image: krakend:latest
+        imagePullPolicy: Never
+        name: krakend
+        ports:
+          - containerPort: 8080
+        command: [ "/usr/bin/krakend" ]
+        args: [ "run", "-d", "-c", "/etc/krakend/krakend.json", "-p", "8080" ]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: krakend
+  name: krakend
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    app: krakend
