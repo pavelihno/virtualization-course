@@ -108,38 +108,63 @@ services:
       - notifications
       - catalog
 
-  mongo:
-    image: mongo:latest
-    volumes:
-      - ./temp/mongoDB:/data/db
+  # mongo:
+  #   image: mongo:latest
+  #   volumes:
+  #     - ./temp/mongoDB:/data/db
   
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.13
-    environment:
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - http.host=0.0.0.0
-      - transport.host=localhost
-      - network.host=0.0.0.0
-      - xpack.security.enabled=false
-    ports:
-      - 9200:9200
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
+  # elasticsearch:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.17.13
+  #   environment:
+  #     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  #     - http.host=0.0.0.0
+  #     - transport.host=localhost
+  #     - network.host=0.0.0.0
+  #     - xpack.security.enabled=false
+  #   ports:
+  #     - 9200:9200
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
   
-  graylog:
-    image: graylog/graylog:5.2
+  # graylog:
+  #   image: graylog/graylog:5.2
+  #   environment:
+  #     - GRAYLOG_PASSWORD_SECRET=1234567812345678
+  #     - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918 # admin
+  #     - GRAYLOG_HTTP_EXTERNAL_URI=http://localhost:9000/
+  #     - GRAYLOG_ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+  #   entrypoint: /usr/bin/tini -- wait-for-it elasticsearch:9200 --  /docker-entrypoint.sh
+  #   ports:
+  #     - 9000:9000
+  #     - 12201:12201
+  #     - 12201:12201/udp
+  #   depends_on:
+  #     - mongo
+  #     - elasticsearch
+
+  postgres-exporter:
+    image: wrouesnel/postgres_exporter:latest
     environment:
-      - GRAYLOG_PASSWORD_SECRET=1234567812345678
-      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918 # admin
-      - GRAYLOG_HTTP_EXTERNAL_URI=http://localhost:9000/
-      - GRAYLOG_ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    entrypoint: /usr/bin/tini -- wait-for-it elasticsearch:9200 --  /docker-entrypoint.sh
+      - DATA_SOURCE_NAME=postgresql://admin:12345678@postgres:5432/appDB?sslmode=disable,postgresql://admin:12345678@postgres:5432/appDB?sslmode=disable
     ports:
-      - 9000:9000
-      - 12201:12201
-      - 12201:12201/udp
+      - 9187:9187
+  
+  prometheus:
+    build:
+      context: ./db/prometheus
+    ports:
+      - 9090:9090
     depends_on:
-      - mongo
-      - elasticsearch
+      - postgres-exporter
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - 3000:3000
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=12345678
+    depends_on:
+      - prometheus

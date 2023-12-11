@@ -64,6 +64,15 @@ kubectl apply -f graylog/graylog.yaml
 minikube service graylog
 
 ==========
+Prometheus + Grafana
+==========
+docker build -t prometheus ./db/prometheus
+kubectl apply -f db/prometheus/postgres-exporter.yaml
+kubectl apply -f db/prometheus/prometheus.yaml
+kubectl apply -f db/grafana/grafana.yaml
+minikube service grafana
+
+==========
 TEST
 ==========
 docker-compose build

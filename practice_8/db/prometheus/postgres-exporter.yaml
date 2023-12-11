@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: postgres-exporter
+  name: postgres-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-exporter
+  template:
+    metadata:
+      labels:
+        app: postgres-exporter
+    spec:
+      containers:
+      - name: postgres-exporter
+        image: wrouesnel/postgres_exporter:latest
+        env:
+        - name: DATA_SOURCE_NAME
+          value: "postgresql:12345678@notifications-db:5432/notificationsDB?sslmode=disable,postgresql://admin:12345678@catalog-db:5432/catalogDB?sslmode=disable"
+        ports:
+        - containerPort: 9187
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: postgres-exporter
+  name: postgres-exporter
+spec:
+  selector:
+    app: postgres-exporter
+  ports:
+  - protocol: TCP
+    port: 9187
+    targetPort: 9187
