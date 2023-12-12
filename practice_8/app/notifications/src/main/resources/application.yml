@@ -34,6 +34,13 @@ spring:
     consumer:
       group-id: notifications-group
 
+management:
+    tracing:
+        sampling:
+            probability: 1.0
+tracing:
+    url: http://${JAEGER_HOST}:${JAEGER_PORT}
+
 server:
   servlet:
     session:

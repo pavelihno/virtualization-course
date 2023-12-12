@@ -18,10 +18,13 @@ services:
       - REDIS_PASSWORD=12345678
       - KAFKA_URL=kafka-broker
       - KAFKA_PORT=9092
+      - JAEGER_HOST=jaeger
+      - JAEGER_PORT=4317
     depends_on:
       - postgres
       - redis-write
       - redis-read
+      - jaeger
   
   catalog:
     build: 
@@ -34,8 +37,11 @@ services:
       - CATALOG_DB_PASSWORD=12345678
       - KAFKA_URL=kafka-broker
       - KAFKA_PORT=9092
+      - JAEGER_HOST=jaeger
+      - JAEGER_PORT=4317
     depends_on:
       - postgres
+      - jaeger
 
   postgres:
     image: postgres:15  
@@ -168,3 +174,13 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=12345678
     depends_on:
       - prometheus
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - 16686:16686
+      - 4317:4317
+      - 4318:4318
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+      - LOG_LEVEL=debug

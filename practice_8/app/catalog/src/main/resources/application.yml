@@ -18,3 +18,10 @@ spring:
 
   kafka:
     bootstrap-servers: ${KAFKA_URL}:${KAFKA_PORT}
+
+management:
+    tracing:
+        sampling:
+            probability: 1.0
+tracing:
+    url: http://${JAEGER_HOST}:${JAEGER_PORT}
